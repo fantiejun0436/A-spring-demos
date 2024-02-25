@@ -10,6 +10,7 @@ import tech.pdai.springboot.redis.lettuce.entity.response.ResponseResult;
 import javax.annotation.Resource;
 
 /**
+ *  Knife测试地址:http://localhost:8080/doc.html#/
  * @author pdai
  */
 @RestController
