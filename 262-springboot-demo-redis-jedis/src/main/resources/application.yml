@@ -3,7 +3,7 @@ server:
 spring:
   redis:
     database: 0
-    host: 127.0.0.1
+    host: www.fantiejun.com
     port: 6379
     #password: test
     jedis:
