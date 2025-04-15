@@ -23,7 +23,7 @@ public class User implements BaseEntity{
 
     private long phoneNumber;
 
-    private LocalDate createTime;
+    private LocalDateTime createTime;
 
     private LocalDateTime updateTime;
 

@@ -20,6 +20,7 @@ public interface IUserService {
 
     int deleteByIds(Long [] ids);
 
+    int save(User user);
     int update(User user);
 
     int updatePassword(User user);
