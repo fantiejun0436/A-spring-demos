@@ -14,7 +14,7 @@ public class User implements BaseEntity{
 
     private Long id;
 
-    private String name;
+    private String userName;
 
     @JsonIgnore
     private String password;
@@ -28,4 +28,6 @@ public class User implements BaseEntity{
     private LocalDateTime updateTime;
 
     private List<Role> roles;
+
+    private String description;
 }

@@ -47,7 +47,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </if>
     </select>
 
-    <select id="findById" parameterType="Long" resultMap="UserResult">
+    <select id="findByIds" parameterType="Long" resultMap="UserResult">
         <include refid="selectUserSql" />
         where u.id=#{id}
     </select>
@@ -93,7 +93,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             update_time
         )values(
             <if test="userName !=null and userName !=''">#{userName},</if>
-            <if test="password !=null and password !=''>">#{password},</if>
+            <if test="password !=null and password !=''">#{password},</if>
             <if test="email !=null and email !=''">#{email},</if>
             <if test="phoneNumber !=null and phoneNumber !=''">#{phoneNumber},</if>
             <if test="description !=null and description !=''">#{description},</if>
