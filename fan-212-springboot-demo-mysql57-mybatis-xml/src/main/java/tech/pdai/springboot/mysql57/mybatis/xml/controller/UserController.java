@@ -2,6 +2,7 @@ package tech.pdai.springboot.mysql57.mybatis.xml.controller;
 
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,8 +13,11 @@ import tech.pdai.springboot.mysql57.mybatis.xml.entity.response.ResponseResult;
 import tech.pdai.springboot.mysql57.mybatis.xml.service.IUserService;
 
 import javax.annotation.Resource;
+import java.lang.reflect.Array;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author tiejun_fan
@@ -56,5 +60,18 @@ public class UserController {
     public ResponseResult<Integer> deleteById(@PathVariable("userId")Long userId){
         int r=  userService.deleteById(userId);
         return ResponseResult.success(r);
+    }
+
+    @ApiOperation("Delete User By Ids")
+    @DeleteMapping("/delete/{ids}")
+    public ResponseResult<Integer> deleteByIds(@PathVariable("ids") Long [] ids){
+        int r=  userService.deleteByIds(ids);
+        return ResponseResult.success(r);
+    }
+
+    @ApiOperation("Update User Password")
+    @PostMapping("/updatePassword")
+    public ResponseResult<Integer> updatePassword(User user){
+       return ResponseResult.success( userService.updatePassword(user));
     }
 }

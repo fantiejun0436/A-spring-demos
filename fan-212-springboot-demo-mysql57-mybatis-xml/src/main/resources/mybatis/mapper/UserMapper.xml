@@ -37,7 +37,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
     <select id="findList" parameterType="tech.pdai.springboot.mysql57.mybatis.xml.entity.query.UserQueryBean" resultMap="UserResult">
-        <include refid="selectUserSql" />
+        <include refid="selectSingleUserSql" />
         where u.id !=0
         <if test="userName !=null and userName !=''">
             AND u.user_name like concat('%',#{userName} ,'%')
@@ -73,9 +73,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="update" parameterType="tech.pdai.springboot.mysql57.mybatis.xml.entity.User">
         update tb_user
             <set>
-                <if test="name !=null and name !=''">user_name =#{name},</if>
+                <if test="userName !=null and userName !=''">user_name =#{userName},</if>
                 <if test="email !=null and email!=''">email =#{email},</if>
-                <if test="phoneNumber !=null and phoneNumber!=''">phoneNumber =#{phoneNumber},</if>
+                <if test="phoneNumber !=null and phoneNumber!=''">phone_number =#{phoneNumber},</if>
                 <if test="description !=null and description !=''">description =#{description},</if>
             </set>
         where id = #{id}
