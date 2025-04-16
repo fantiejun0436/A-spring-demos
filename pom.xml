@@ -115,6 +115,7 @@
         <module>171-springboot-demo-view-thymeleaf3</module>
         <module>fan-212-springboot-demo-mysql57-mybatis-xml</module>
         <module>fan-212-springboot-demo-mysql57-mybatis-xml-02</module>
+        <module>266-springboot-demo-redis-utiles-lock</module>
     </modules>
 
     <properties>
