@@ -50,4 +50,11 @@ public class UserController {
     public ResponseResult<List<User>> list(UserQueryBean userQueryBean){
         return ResponseResult.success(userService.findList(userQueryBean));
     }
+
+    @ApiOperation("Delete User By Id")
+    @GetMapping("/delete/{userId}")
+    public ResponseResult<Integer> deleteById(@PathVariable("userId")Long userId){
+        int r=  userService.deleteById(userId);
+        return ResponseResult.success(r);
+    }
 }

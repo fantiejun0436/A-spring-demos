@@ -30,9 +30,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         inner join tb_role r on ur.role_id=r.id
     </sql>
 
-    <select id="findById" parameterType="tech.pdai.springboot.mysql57.mybatis.xml.entity.query.UserQueryBean" resultMap="UserResult">
+    <select id="findList" parameterType="tech.pdai.springboot.mysql57.mybatis.xml.entity.query.UserQueryBean" resultMap="UserResult">
         <include refid="selectUserSql" />
-        where u.id=0
+        where u.id !=0
         <if test="userName !=null and userName !=''">
             AND u.user_name like concat('%',#{userName} ,'%')
         </if>
@@ -47,10 +47,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </if>
     </select>
 
-    <select id="findByIds" parameterType="Long" resultMap="UserResult">
-        <include refid="selectUserSql" />
-        where u.id=#{id}
+    <select id="findById" parameterType="Long" resultMap="UserResult">
+        <include refid="selectUserSql"/>
+            where u.id =#{id}
     </select>
+
 
     <delete id="deleteById" parameterType="Long">
         delete from tb_user where id = #{id}
