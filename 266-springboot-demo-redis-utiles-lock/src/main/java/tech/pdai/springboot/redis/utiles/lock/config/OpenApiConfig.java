@@ -20,7 +20,8 @@ import springfox.documentation.service.RequestParameter;
 import springfox.documentation.service.Response;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
-import tech.pdai.springboot.redis.jedis.constants.ResponseStatus;
+import tech.pdai.springboot.redis.utiles.lock.constants.ResponseStatus;
+
 
 import java.util.ArrayList;
 import java.util.List;

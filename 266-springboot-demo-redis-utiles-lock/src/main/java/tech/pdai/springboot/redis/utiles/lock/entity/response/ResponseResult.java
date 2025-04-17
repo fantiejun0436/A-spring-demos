@@ -2,7 +2,8 @@ package tech.pdai.springboot.redis.utiles.lock.entity.response;
 
 import lombok.Builder;
 import lombok.Data;
-import tech.pdai.springboot.redis.jedis.constants.ResponseStatus;
+import tech.pdai.springboot.redis.utiles.lock.constants.ResponseStatus;
+
 
 import java.io.Serializable;
 
