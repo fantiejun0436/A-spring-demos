@@ -14,7 +14,7 @@ import javax.annotation.Resource;
 
 @RestController
 @RequestMapping("/user")
-public class UserController {
+public class RedisUserController {
 
     @Resource
     private RedisTemplate<String, User> redisTemplate;
