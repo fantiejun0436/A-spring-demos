@@ -534,18 +534,19 @@ public class RedisUtils {
         try {
             // 尝试获取锁，并设置超时和等待时间
             isLocked = lock.tryLock();
-            System.out.println("3-1.获得Redis锁后，睡眠60秒---");
+            log.info("3-1. {} 获得Redis锁后，睡眠60秒---",getCurThreadName());
             Thread.sleep(1000 * 60);
+
             // 如果获取到锁且操作对应的标识不存在，则创建标识并返回true，表示操作未执行过
             if (isLocked && getStr(key) == null) {
-                setStr(key, inputVal, hour);
+                setStr(key, inputVal+getCurThreadName(), hour);
 
-                System.out.println("3-2.业务逻辑执行官完成后，返回true 睡眠60秒---");
+                log.info("3-2. {} 业务逻辑执行官完成后，返回true 睡眠60秒---",getCurThreadName());
                 Thread.sleep(1000 * 60);
                 return true;
             } else {
                 // 如果未获取到锁或操作对应的标识已存在，记录日志并返回false
-                log.info("Failed to acquire lock for idempotent operation: {}", lockKey);
+                log.info("Failed to acquire lock for idempotent operation: {},{}", lockKey,getCurThreadName());
             }
         } catch (Exception e){
             // 如果在等待获取锁的过程中被中断，记录错误日志
@@ -555,7 +556,7 @@ public class RedisUtils {
             if (isLocked) {
 
                 try {
-                    System.out.println("3-3.finally 释放锁前 睡眠60秒---");
+                    log.info("3-3. {} finally 释放锁前 睡眠60秒---",getCurThreadName());
                     Thread.sleep(1000 * 60);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
@@ -566,5 +567,9 @@ public class RedisUtils {
         }
         // 如果未获取到锁或操作对应的标识已存在，返回false
         return false;
+    }
+
+    private String getCurThreadName(){
+       return "【Thread "+Thread.currentThread().getName() +":"+ Thread.currentThread().getId()+"】";
     }
 }
