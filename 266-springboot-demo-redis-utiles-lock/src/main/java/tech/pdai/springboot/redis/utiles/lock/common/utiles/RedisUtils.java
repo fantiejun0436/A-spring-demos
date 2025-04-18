@@ -478,14 +478,14 @@ public class RedisUtils {
      * 检查操作是否已被锁定
      *
      * @param operationName 操作名称
-     * @param requestId 请求标识
+     * @param inputKey 请求标识
      * @return 如果操作已被锁定，则返回true；否则返回false
      */
-    public boolean isLocked(String operationName, String requestId, String val, Integer hour) {
+    public boolean isLocked(String operationName, String inputKey, String inputVal, Integer hour) {
         // 构造锁的唯一键值
-        String lockKey = IDEMPOTENT_LOCK_KEY + ConstantEnum.KEY_SPLIT.getValue() + operationName + ConstantEnum.KEY_SPLIT.getValue() + requestId;
+        String lockKey = IDEMPOTENT_LOCK_KEY + ConstantEnum.KEY_SPLIT.getValue() + operationName + ConstantEnum.KEY_SPLIT.getValue() + inputKey;
         // 构造操作的唯一键值
-        String key = IDEMPOTENT_KEY + ConstantEnum.KEY_SPLIT.getValue() + operationName + ConstantEnum.KEY_SPLIT.getValue() + requestId;
+        String key = IDEMPOTENT_KEY + ConstantEnum.KEY_SPLIT.getValue() + operationName + ConstantEnum.KEY_SPLIT.getValue() + inputKey;
         // 获取Redis分布式锁
         RLock lock = redissonClient.getLock(lockKey);
         // 标记是否获取到锁
@@ -495,7 +495,7 @@ public class RedisUtils {
             isLocked = lock.tryLock();
             // 如果获取到锁且操作对应的标识不存在，则创建标识并返回true，表示操作未执行过
             if (isLocked && getStr(key) == null) {
-                setStr(key, val, hour);
+                setStr(key, inputVal, hour);
                 return true;
             } else {
                 // 如果未获取到锁或操作对应的标识已存在，记录日志并返回false
@@ -507,6 +507,60 @@ public class RedisUtils {
         }finally {
             // 如果获取到锁，释放锁
             if (isLocked) {
+                lock.unlock();
+            }
+        }
+        // 如果未获取到锁或操作对应的标识已存在，返回false
+        return false;
+    }
+
+
+    /**
+     * 检查操作是否已被锁定
+     *
+     * @param operationName 操作名称
+     * @param inputKey 请求标识
+     * @return 如果操作已被锁定，则返回true；否则返回false
+     */
+    public boolean isLockedRebug(String operationName, String inputKey, String inputVal, Integer hour) {
+        // 构造锁的唯一键值
+        String lockKey = IDEMPOTENT_LOCK_KEY + ConstantEnum.KEY_SPLIT.getValue() + operationName + ConstantEnum.KEY_SPLIT.getValue() + inputKey;
+        // 构造操作的唯一键值
+        String key = IDEMPOTENT_KEY + ConstantEnum.KEY_SPLIT.getValue() + operationName + ConstantEnum.KEY_SPLIT.getValue() + inputKey;
+        // 获取Redis分布式锁
+        RLock lock = redissonClient.getLock(lockKey);
+        // 标记是否获取到锁
+        boolean isLocked = false;
+        try {
+            // 尝试获取锁，并设置超时和等待时间
+            isLocked = lock.tryLock();
+            System.out.println("3-1.获得Redis锁后，睡眠60秒---");
+            Thread.sleep(1000 * 60);
+            // 如果获取到锁且操作对应的标识不存在，则创建标识并返回true，表示操作未执行过
+            if (isLocked && getStr(key) == null) {
+                setStr(key, inputVal, hour);
+
+                System.out.println("3-2.业务逻辑执行官完成后，返回true 睡眠60秒---");
+                Thread.sleep(1000 * 60);
+                return true;
+            } else {
+                // 如果未获取到锁或操作对应的标识已存在，记录日志并返回false
+                log.info("Failed to acquire lock for idempotent operation: {}", lockKey);
+            }
+        } catch (Exception e){
+            // 如果在等待获取锁的过程中被中断，记录错误日志
+            log.error("isLocked is error", e);
+        }finally {
+            // 如果获取到锁，释放锁
+            if (isLocked) {
+
+                try {
+                    System.out.println("3-3.finally 释放锁前 睡眠60秒---");
+                    Thread.sleep(1000 * 60);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
                 lock.unlock();
             }
         }
